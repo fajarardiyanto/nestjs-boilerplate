@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './config/database/database.module';
 import { MinioClientModule } from './config/minio-client/minio-client.module';
 import { AssetsModule } from './assets/assets.module';
+import { RedisModule } from './config/redis/redis.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AssetsModule } from './assets/assets.module';
     UsersModule,
     MinioClientModule,
     AssetsModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],

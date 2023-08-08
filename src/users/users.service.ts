@@ -4,16 +4,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { UsersEntity } from './users.entity';
 import { UsersDTO } from './dto/user.dto';
+import { RedisService } from 'src/config/redis/redis.service';
+import { RedisKeys } from 'src/enums/redis-keys.enum';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UsersEntity)
     private userRepository: Repository<UsersEntity>,
+    private redisService: RedisService,
   ) {}
 
   async findAll() {
-    return await this.userRepository.find();
+    const res = await this.userRepository.find();
+    await this.redisService.setCache(RedisKeys.RedisExample, res);
+    return res;
   }
 
   async create(data: UsersDTO) {
