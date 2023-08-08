@@ -6,6 +6,7 @@ import { UsersEntity } from './users.entity';
 import { UsersDTO } from './dto/user.dto';
 import { RedisService } from 'src/config/redis/redis.service';
 import { RedisKeys } from 'src/enums/redis-keys.enum';
+import { ProducerService } from 'src/config/kafka/producer/producer.service';
 
 @Injectable()
 export class UsersService {
@@ -13,6 +14,7 @@ export class UsersService {
     @InjectRepository(UsersEntity)
     private userRepository: Repository<UsersEntity>,
     private redisService: RedisService,
+    private kafkaService: ProducerService,
   ) {}
 
   async findAll() {
@@ -24,6 +26,14 @@ export class UsersService {
   async create(data: UsersDTO) {
     const user = this.userRepository.create(data);
     await this.userRepository.save(user);
+    this.kafkaService.produce({
+      topic: process.env.KAFKA_TOPIC,
+      messages: [
+        {
+          value: JSON.stringify(user),
+        },
+      ],
+    });
     return user;
   }
 

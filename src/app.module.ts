@@ -7,6 +7,7 @@ import { DatabaseModule } from './config/database/database.module';
 import { MinioClientModule } from './config/minio-client/minio-client.module';
 import { AssetsModule } from './assets/assets.module';
 import { RedisModule } from './config/redis/redis.module';
+import { KafkaModule } from './config/kafka/kafka.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RedisModule } from './config/redis/redis.module';
     MinioClientModule,
     AssetsModule,
     RedisModule,
+    KafkaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
